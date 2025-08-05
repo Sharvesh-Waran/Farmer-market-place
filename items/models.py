@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from core.models import UserProfile
+
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Product(models.Model):
@@ -24,3 +27,12 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.quantity} @ {self.price}"
+    
+    def save(self, *args, **kwargs):
+        # Check if the user has the role 'Farmer'
+        user_profile = UserProfile.objects.filter(user=self.created_by).first()
+        if user_profile is None or user_profile.role.name != "Farmer":
+            raise ValidationError("Only users with the 'Farmer' role can create transactions.")
+
+        # Proceed with saving the instance if the role is valid
+        super().save(*args, **kwargs)
