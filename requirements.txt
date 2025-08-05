@@ -3,3 +3,4 @@ dj-database-url==3.0.1
 Django==5.2.4
 psycopg2-binary==2.9.10
 sqlparse==0.5.3
+python==3.12.3
