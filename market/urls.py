@@ -10,4 +10,5 @@ urlpatterns = [
     path('items/', include('items.urls')),
     path("admin/", admin.site.urls),
     path('dashboard', include('dashboard.urls')),
+    path('api/v1/', include('api.urls')),
 ] 

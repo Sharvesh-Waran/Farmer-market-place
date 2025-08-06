@@ -6,13 +6,22 @@ from items.models import Product, Transaction
 from .forms import SignupForm
 from .models import UserProfile, Role
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+#Serializer?
+
 # Create your views here.
 
 def isFarmer(request):
-    try:
-        farmer_role = Role.objects.get(name = 'Farmer')
-        return UserProfile.objects.filter(user=request.user, role=farmer_role)
-    except Role.DoesNotExist:
+    if request.user.is_authenticated:
+        try:
+            farmer_role = Role.objects.get(name = 'Farmer')
+            return UserProfile.objects.filter(user=request.user, role=farmer_role)
+        except Role.DoesNotExist:
+            return False
+    else:
+        print("Not logged in")
         return False
     
 def isCustomer(request):
