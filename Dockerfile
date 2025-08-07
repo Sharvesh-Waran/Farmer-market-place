@@ -22,7 +22,7 @@ RUN apt-get update && \
 
 # Copy app from build stage
 COPY --from=backend /app /app
-
+RUN pip install --no-cache-dir -r requirements.txt
 # Copy nginx and entrypoint
 COPY nginx.conf /etc/nginx/sites-enabled/default
 COPY entrypoint.sh /app/entrypoint.sh
