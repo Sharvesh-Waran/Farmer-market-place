@@ -18,7 +18,7 @@ DATABASES = {
 '''
 ```
 
-Comment out the postgres database configuration
+Comment out the postgres database configuration below
 
 ```py
 DATABASES = {
@@ -34,6 +34,12 @@ DATABASES = {
         },
     }
 }
+```
+
+Server can be run using regular Django manage.py commands
+
+```cmd
+python manage.py runserver
 ```
 
 
