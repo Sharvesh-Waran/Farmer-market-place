@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-cd /app/backend
+cd /app
 
-echo " Running Django migrations..."
+echo "Running Django migrations..."
 python3 manage.py migrate
 
 echo "Collecting static files..."
@@ -12,5 +12,5 @@ python3 manage.py collectstatic --noinput
 echo "Starting Django..."
 python3 manage.py runserver 0.0.0.0:8000 &
 
-echo "Starting Nginx..."
+echo "starting Nginx..."
 exec nginx -g "daemon off;"
