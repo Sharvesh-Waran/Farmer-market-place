@@ -1,10 +1,16 @@
 #!/bin/bash
+set -e
 
-# Run Django migrations and start the server
-cd /app/backend
-python manage.py migrate
-python manage.py collectstatic --noinput &
-python manage.py runserver 0.0.0.0:8000 &
+cd /app
 
-# Start nginx
-nginx -g "daemon off;"
+echo "Running Django migrations..."
+python3 manage.py migrate
+
+echo "Collecting static files..."
+python3 manage.py collectstatic --noinput
+
+echo "Starting Django..."
+python3 manage.py runserver 0.0.0.0:8000 &
+
+echo "Starting Nginx..."
+exec nginx -g "daemon off;"

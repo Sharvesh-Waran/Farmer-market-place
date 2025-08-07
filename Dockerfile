@@ -1,36 +1,38 @@
-# Backend build stage
+# ------------ Build stage ------------
 FROM python:3.12-slim as backend
 
 WORKDIR /app
-COPY backend/ /app/backend/
-COPY frontend/ /app/frontend/
 
-# Install dependencies
-RUN pip install --upgrade pip
-RUN pip install -r backend/requirements.txt
+# Copy and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Final image
-FROM debian:bullseye-slim
+# Copy entire Django project
+COPY . .
 
-# Install Nginx and required tools
+# ------------ Final image with Nginx and Python ------------
+FROM python:3.12-slim
+
+# Install Nginx
 RUN apt-get update && \
-    apt-get install -y nginx && \
+    apt-get install -y nginx curl && \
     rm /etc/nginx/sites-enabled/default && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy backend and frontend
-COPY --from=backend /app/backend /app/backend
-COPY --from=backend /app/frontend /var/www/html
+WORKDIR /app
 
-# Copy entrypoint and config
-COPY entrypoint.sh /app/entrypoint.sh
+# Copy from builder stage
+COPY --from=backend /app /app
+
+# Optional: install Python dependencies again (safe redundancy)
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Copy Nginx and entrypoint
 COPY nginx.conf /etc/nginx/sites-enabled/default
+COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-# Set working dir and expose port
-WORKDIR /app
 EXPOSE 80
 
-# Run the app
 CMD ["/app/entrypoint.sh"]
