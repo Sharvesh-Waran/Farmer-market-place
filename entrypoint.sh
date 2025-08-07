@@ -1,10 +1,16 @@
 #!/bin/bash
+set -e  # fail if any command fails
 
-# Run Django migrations and start the server
 cd /app/backend
+
+echo "Applying database migrations..."
 python manage.py migrate
-python manage.py collectstatic --noinput &
+
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
+
+echo "Starting Django application..."
 python manage.py runserver 0.0.0.0:8000 &
 
-# Start nginx
-nginx -g "daemon off;"
+echo "Starting Nginx..."
+exec nginx -g "daemon off;"
