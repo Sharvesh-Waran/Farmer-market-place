@@ -1,19 +1,16 @@
 #!/bin/bash
-set -e  # fail if any command fails
+set -e
 
-#cd /app/backend/
-#app/Farmer-market-place/backend/manage.py
-cd /app/Farmer-market-place/backend
+cd /app/backend
 
-
-echo "Applying database migrations..."
-python manage.py migrate
+echo " Running Django migrations..."
+python3 manage.py migrate
 
 echo "Collecting static files..."
-python manage.py collectstatic --noinput
+python3 manage.py collectstatic --noinput
 
-echo "Starting Django application..."
-python manage.py runserver 0.0.0.0:8000 &
+echo "Starting Django..."
+python3 manage.py runserver 0.0.0.0:8000 &
 
 echo "Starting Nginx..."
 exec nginx -g "daemon off;"
