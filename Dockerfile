@@ -1,16 +1,16 @@
-# ------------ Backend build stage ------------
+# ------------ Build stage with Python + Django ------------
 FROM python:3.12-slim as backend
 
 WORKDIR /app
 
-# Install Python deps
+# Copy requirements and install
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend code
-COPY backend/ ./backend/
+# Copy all Django project files (from root)
+COPY . .
 
-# ------------ Final image stage with Nginx ------------
+# ------------ Final image with Nginx ------------
 FROM debian:bullseye-slim
 
 # Install Nginx and dependencies
@@ -20,10 +20,10 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy backend app from previous stage
+# Copy app from build stage
 COPY --from=backend /app /app
 
-# Copy nginx config and entrypoint
+# Copy nginx and entrypoint
 COPY nginx.conf /etc/nginx/sites-enabled/default
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
