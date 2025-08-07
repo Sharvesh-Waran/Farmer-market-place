@@ -1,7 +1,10 @@
 #!/bin/bash
 set -e  # fail if any command fails
 
-cd /app/backend
+#cd /app/backend/
+#app/Farmer-market-place/backend/manage.py
+cd /app/Farmer-market-place/backend
+
 
 echo "Applying database migrations..."
 python manage.py migrate
