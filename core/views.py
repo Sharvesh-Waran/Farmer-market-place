@@ -9,9 +9,20 @@ from .models import UserProfile, Role
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+
+import logging
+
+# !!!ADD LOGGERS
+# Appropriate comments, README
 #Serializer?
 
 # Create your views here.
+
+# Configure basic logging (e.g., to console)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Get a logger instance
+logger = logging.getLogger(__name__)
 
 def isFarmer(request):
     if request.user.is_authenticated:
@@ -19,16 +30,22 @@ def isFarmer(request):
             farmer_role = Role.objects.get(name = 'Farmer')
             return UserProfile.objects.filter(user=request.user, role=farmer_role)
         except Role.DoesNotExist:
+            logger.info("Not a farmer")
             return False
     else:
-        print("Not logged in")
+        logger.error("Not logged in" + "User: " + str(request.user))
         return False
     
 def isCustomer(request):
-    try:
-        customer_role = Role.objects.get(name = 'Customer')
-        return UserProfile.objects.filter(user=request.user, role=customer_role)
-    except Role.DoesNotExist:
+    if request.user.is_authenticated:
+        try:
+            customer_role = Role.objects.get(name = 'Customer')
+            return UserProfile.objects.filter(user=request.user, role=customer_role)
+        except Role.DoesNotExist:
+            logger.info("Not a customer")
+            return False
+    else:
+        logger.error("Not logged in" + "User: " + str(request.user))
         return False
 
 

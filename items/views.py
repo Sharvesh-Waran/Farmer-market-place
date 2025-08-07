@@ -1,22 +1,40 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.db.models import Q
 
 from datetime import datetime
 
-from .models import Transaction
+from .models import Transaction, Product
 from .forms import NewTransactionForm
 
 from core.views import isFarmer, isCustomer
 
 # Create your views here.
-
 @login_required
-def browse(request):
+def items(request):
+    query = request.GET.get('query', '')
     transactions = Transaction.objects.filter(is_sold=False)
+    product = Product.objects.filter(name__icontains=query)
+    if query:
+        transactions =  transactions.filter(name = product)
 
     return render(request, 'item/browse.html', {
         'transactions': transactions,
+        'query': query,
+    })
+
+
+@login_required
+def browse(request):
+    query = request.GET.get('query', '')
+    transactions = Transaction.objects.filter(is_sold=False)
+    if query:
+        transactions =  transactions.filter(name__name__icontains=query)
+
+    return render(request, 'item/browse.html', {
+        'transactions': transactions,
+        'query': query,
     })
 
 @login_required
@@ -44,7 +62,7 @@ def detail(request, pk):
                 transaction.sold_at = datetime.now()
                 transaction.sold_to = request.user
                 transaction.save()
-                return HttpResponse("Successfully completed transaction.")
+                return redirect('dashboard:index')
             
             return HttpResponse("Error. Item has already been sold")
         

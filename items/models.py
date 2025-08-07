@@ -31,7 +31,7 @@ class Transaction(models.Model):
     def save(self, *args, **kwargs):
         # Check if the user has the role 'Farmer'
         user_profile = UserProfile.objects.filter(user=self.created_by).first()
-        if user_profile is None or user_profile.role.name != "Farmer":
+        if (user_profile is None or user_profile.role.name != "Farmer") and self.is_sold == False:
             raise ValidationError("Only users with the 'Farmer' role can create transactions.")
 
         # Proceed with saving the instance if the role is valid

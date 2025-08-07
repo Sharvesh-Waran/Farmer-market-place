@@ -17,4 +17,4 @@ class SingleTransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ['id', 'product_name', 'price', 'quantity', 'created_by', 'created_at']
+        fields = ['id', 'product_name', 'price', 'quantity', 'created_by', 'created_at', 'sold_to', 'sold_at']

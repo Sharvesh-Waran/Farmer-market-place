@@ -78,15 +78,15 @@ WSGI_APPLICATION = "market.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-'''
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-'''
 
+'''
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -100,6 +100,7 @@ DATABASES = {
         },
     }
 }
+'''
 
 
 # Password validation
@@ -142,7 +143,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
+'''
 REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'djangojwtauth_cookie',
@@ -154,3 +155,4 @@ REST_FRAMEWORK = {
         "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ),
 }
+'''

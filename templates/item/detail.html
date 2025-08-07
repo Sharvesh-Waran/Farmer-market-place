@@ -7,9 +7,18 @@
         <h1 class="mb-6 text-3xl">{{ transaction.name }}</h1>
         <p class="text-gray-500"><strong>Price: </strong>{{ transaction.price }}Rs</p>
         <p class="text-gray-500"><strong>Quantity: </strong>{{ transaction.quantity }}Kg</p>
-        <p class="text-gray-500"><strong>Seller: </strong>{{ transaction.created_by }}</p>
-        <p class="text-gray-500"><strong>Created at: </strong>{{ transaction.created_at }}</p>
-        {% if isCustomer %}
+        <div class="mt-4 inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">
+                        <p>Seller: {{  transaction.created_by }}</p>
+                        <p>{{  transaction.created_at }}</p>
+        </div>
+        <br>
+        {% if transaction.sold_to %}
+                    <div class="mt-4 inline-block px-3 py-1 text-sm font-semibold text-white bg-cyan-500 rounded-full">
+                        <p>Buyer: {{  transaction.sold_to }}</p>
+                        <p>{{  transaction.sold_at }}</p>
+                    </div>
+        {% endif %}
+        {% if isCustomer  and not transaction.sold_to%}
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Buy Product</button>

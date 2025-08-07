@@ -14,6 +14,18 @@
                     <h2 class="text-2xl">{{ item.name }}</h2>
                     <p class="text-gray-500">Price: {{ item.price }}Rs</p>
                     <p class="text-gray-500">Quantity: {{ item.quantity }}Kg</p>
+                    {% if item.created_by %}
+                    <div class="mt-4 inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">
+                        <p>Seller: {{  item.created_by }}</p>
+                        <p>{{  item.created_at }}</p>
+                    </div>
+                    {% endif %}
+                    {% if item.sold_to %}
+                    <div class="mt-4 inline-block px-3 py-1 text-sm font-semibold text-white bg-cyan-500 rounded-full">
+                        <p>Buyer: {{  item.sold_to }}</p>
+                        <p>{{  item.sold_at }}</p>
+                    </div>
+                    {% endif %}
                 </div>
             </a>
         </div>
