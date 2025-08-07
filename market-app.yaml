@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: farmer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: market-deployment
+  namespace: farmer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: market
+  template:
+    metadata:
+      labels:
+        app: market
+    spec:
+      containers:
+        - name: market-container
+          image: sharveshwaran0902/market:latest
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: market-service
+  namespace: farmer
+spec:
+  selector:
+    app: market
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
