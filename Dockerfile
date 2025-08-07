@@ -11,8 +11,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # ------------ Final image with Nginx ------------
-FROM debian:bullseye-slim
-
+#FROM debian:bullseye-slim
+FROM python:3.12-slim
 # Install Nginx and dependencies
 RUN apt-get update && \
     apt-get install -y nginx curl && \
