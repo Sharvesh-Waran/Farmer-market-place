@@ -10,7 +10,9 @@ echo "Collecting static files..."
 python3 manage.py collectstatic --noinput
 
 echo "Starting Django..."
-python3 manage.py runserver 0.0.0.0:8000 &
+#python3 manage.py runserver 0.0.0.0:8000 
+python manage.py runserver 0.0.0.0:8000
+
 
 echo "Starting Nginx..."
 exec nginx -g "daemon off;"
