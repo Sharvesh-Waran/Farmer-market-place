@@ -1,35 +1,38 @@
-# ------------ Build stage with Python + Django ------------
+# ------------ Build stage ------------
 FROM python:3.12-slim as backend
 
 WORKDIR /app
 
-# Copy requirements and install
+# Copy and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all Django project files (from root)
+# Copy entire Django project
 COPY . .
 
-# ------------ Final image with Nginx ------------
-#FROM debian:bullseye-slim
+# ------------ Final image with Nginx and Python ------------
 FROM python:3.12-slim
-# Install Nginx and dependencies
+
+# Install Nginx
 RUN apt-get update && \
     apt-get install -y nginx curl && \
     rm /etc/nginx/sites-enabled/default && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy app from build stage
+WORKDIR /app
+
+# Copy from builder stage
 COPY --from=backend /app /app
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-# Copy nginx and entrypoint
+
+# Optional: install Python dependencies again (safe redundancy)
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Copy Nginx and entrypoint
 COPY nginx.conf /etc/nginx/sites-enabled/default
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-WORKDIR /app
 EXPOSE 80
 
 CMD ["/app/entrypoint.sh"]
