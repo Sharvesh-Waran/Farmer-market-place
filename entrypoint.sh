@@ -8,7 +8,7 @@ echo "Running Django migrations..."
 
 echo "Collecting static files..."
 #python3 manage.py collectstatic --settings=market.settings --noinput
-python3 manage.py 
+python3 manage.py shell
 # Set default OTLP endpoint if not provided
 OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector-opentelemetry-collector.mointorlgpt.svc.cluster.local:4318}
 
