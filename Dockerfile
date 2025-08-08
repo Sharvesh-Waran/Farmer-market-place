@@ -15,7 +15,7 @@ FROM python:3.12-slim
 
 # Install Nginx
 RUN apt-get update && \
-    apt-get install -y nginx curl && \
+    apt-get install -y nginx curl libpq-dev && \
     rm /etc/nginx/sites-enabled/default && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
